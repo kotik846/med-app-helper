@@ -1,0 +1,16 @@
+{
+  "name": "medical-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.js",
+    "dev:web": "vite",
+    "ollama:up": "docker compose up -d ollama",
+    "ollama:pull": "docker compose exec ollama ollama pull qwen3:1.7b",
+    "ollama:down": "docker compose down"
+  },
+  "devDependencies": {
+    "vite": "^7.1.5"
+  }
+}
