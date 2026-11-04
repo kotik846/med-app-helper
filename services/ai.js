@@ -1,7 +1,3 @@
-const API_KEY = import.meta.env.VITE_API_KEY;
-const FOLDER_ID = import.meta.env.VITE_FOLDER_ID;
-const API_MODEL = import.meta.env.VITE_API_MODEL || "yandexgpt-lite";
-
 const SYSTEM_PROMPT = `Ты — МедИИ, медицинский ИИ-помощник. 
 ВАЖНО: Пиши грамотно, без опечаток.
 ПРАВИЛА:
@@ -12,6 +8,9 @@ const SYSTEM_PROMPT = `Ты — МедИИ, медицинский ИИ-помо
 5. СТИЛЬ: По-русски, без Markdown (звездочек, решеток), обычный текст с абзацами. Дружелюбно, но профессионально.`;
 
 export async function requestMedicalResponse(text, chatHistory, onChunk) {
+  const folderId = import.meta.env.VITE_FOLDER_ID;
+  const apiModel = import.meta.env.VITE_API_MODEL || "yandexgpt-lite";
+
   const messages = [
     { role: "system", text: SYSTEM_PROMPT },
     ...chatHistory.slice(-4).map(msg => ({
@@ -21,33 +20,31 @@ export async function requestMedicalResponse(text, chatHistory, onChunk) {
     { role: "user", text: text }
   ];
 
-  // Используем новый endpoint Яндекса
-  const response = await fetch(`/api/yandex/foundationModels/v1/completion`, {
-    method: "POST",
+  // Запрос идёт на нашу серверную функцию (безопасно и для локалки, и для Vercel)
+  const response = await fetch('/api/yandex', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Api-Key ${API_KEY}`,
-      "x-folder-id": FOLDER_ID
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      modelUri: `gpt://${FOLDER_ID}/${API_MODEL}/latest`,
+      modelUri: `gpt://${folderId}/${apiModel}/latest`,
       completionOptions: {
         stream: false,
         temperature: 0.4,
-        maxTokens: "1000"
+        maxTokens: 1000
       },
       messages: messages
     })
   });
 
   if (!response.ok) {
-    const err = await response.text();
-    console.error("Yandex API Error:", err);
-    throw new Error(`Ошибка YandexGPT ${response.status}: ${err}`);
+    const err = await response.json().catch(() => ({ error: 'Unknown error' }));
+    console.error('Yandex API Error:', err);
+    throw new Error(`Ошибка YandexGPT: ${err.error?.message || response.statusText}`);
   }
 
   const data = await response.json();
-  const result = data.result?.alternatives?.[0]?.message?.text || "Не удалось получить ответ";
+  const result = data.result?.alternatives?.[0]?.message?.text || 'Не удалось получить ответ';
   
   if (onChunk) {
     onChunk(result);

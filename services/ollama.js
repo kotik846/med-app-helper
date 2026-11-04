@@ -98,5 +98,5 @@ export async function requestMedicalResponse(text, chatHistory, onChunk) {
     }
   }
 
-  return result;
+  return result
 }
