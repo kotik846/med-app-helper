@@ -1,7 +1,7 @@
 {
-  "name": "medical-app",
-  "version": "1.0.0",
+  "name": "med-app-helper",
   "private": true,
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,6 +9,6 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "vite": "^7.1.5"
+    "vite": "^7.0.0"
   }
 }
