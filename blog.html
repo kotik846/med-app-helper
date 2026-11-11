@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Блог — МедИИ</title>
+<link rel="stylesheet" href="./styles/blog.css">
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="/index.html"><span class="cross">+</span>МедИИ</a>
+  <nav><a href="/index.html">Помощник</a><a class="on" href="/blog.html">Блог</a><a href="/studio.html">Студия</a></nav>
+</header>
+<section class="hero">
+  <div class="wrap">
+    <span class="badge" id="mode">Локальный режим</span>
+    <h1>Медицинский блог</h1>
+    <p>Спокойные и понятные материалы о здоровье, первой помощи и подготовке к врачу.</p>
+  </div>
+</section>
+<main class="wrap main">
+  <div class="toolbar">
+    <input id="search" type="search" placeholder="Поиск статей…">
+    <select id="sort"><option value="date">Сначала новые</option><option value="views">По просмотрам</option><option value="title">По алфавиту</option></select>
+    <span id="count" class="count"></span>
+  </div>
+  <div id="list" class="grid"></div>
+</main>
+<div id="modal" class="modal" hidden>
+  <div class="sheet">
+    <button id="close" class="close" aria-label="Закрыть">×</button>
+    <article id="article" class="article"></article>
+  </div>
+</div>
+<script type="module" src="./js/blog.js"></script>
+</body>
+</html>
